@@ -23,7 +23,27 @@ var state = (function () {
   return state;
 })();
 
-var currentQ = null;
+Class("S", {
+  has : {
+    currentQuestion : {
+      is : "ro",
+      init : null
+    },
+    i : {
+      is : "ro",
+      init : 0
+    }
+  }, methods : {
+    nextQuestion : function () {
+      this.currentQuestion = state.getRandomQuestion();
+      this.i++;
+    },
+    isRunning : function () {
+      return this.currentQuestion !== null;
+    }
+  }
+});
+var s = new S();
 
 var ircWrapper = new IrcWrapper({
   IRC : IRC,
@@ -38,21 +58,23 @@ var ircWrapper = new IrcWrapper({
     privmsg : [{
       messageString : "!trivia",
       callback : function (h) {
-        if (currentQ !== null) {
+        if (s.isRunning()) {
+          console.log("isRunning");
           return;
         }
         h.reply("Starting trivia!");
-        currentQ = state.getRandomQuestion();
-        h.reply(currentQ.getQuestion());
+        s.nextQuestion();
+        h.reply(s.getI() + ". " + s.getCurrentQuestion().getQuestion());
       }
     }, {
       callback : function (h) {
-        if (currentQ === null) {
+        if (!s.isRunning()) {
           return;
         }
-        if (currentQ.isCorrectAnswer(h.message)) {
-          currentQ = null;
+        if (s.getCurrentQuestion().isCorrectAnswer(h.message)) {
           h.reply(h.person.getNick() + " got the right answer!");
+          s.nextQuestion();
+          h.reply(s.getI() + ". " + s.getCurrentQuestion().getQuestion());
         }
       }
     }]
