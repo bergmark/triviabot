@@ -1,6 +1,5 @@
-var IRC = require('./vendor/IRC-js/lib/irc');
-var IrcWrapper = require('./vendor/IrcWrapper/lib/IrcWrapper');
 var triviabot = require('./triviabot');
+var IRC = triviabot.IRC;
 var createTriviaBot = triviabot.createTriviaBot;
 
 var iw = createTriviaBot({
