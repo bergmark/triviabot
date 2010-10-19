@@ -1,4 +1,4 @@
-require('Question');
+require('../triviabot.js');
 
 module.exports = (function () {
   return {
