@@ -5,6 +5,16 @@ require('../triviabot');
 
 module.exports = (function () {
   var Assertion = CactusJuice.Dev.Assertion;
+
+  function createSampleTrivia() {
+    var trivia = new Trivia();
+    trivia.addQuestion(new Question({
+      question : "What is 3/2?",
+      answers : ["1.5", "1,5"]
+    }));
+    return trivia;
+  }
+
   return {
     test : function (assert) {
       var assertException = Assertion.exception.bind(Assertion, assert);
@@ -33,9 +43,13 @@ module.exports = (function () {
         startTriggers++;
         events.push("Started");
       });
+
+      // Can only get question string if trivia is started.
+      assertException(/:getCurrentQuestionString:.+not started/i, trivia.getCurrentQuestionString.bind(trivia));
+
       trivia.subscribe("NewQuestion", function () {
         // Current question should be set when trivia starts.
-        assert.ok(trivia.getCurrentQuestion() instanceof Question);
+        assert.ok(typeof trivia.getCurrentQuestionString() === "string");
         newQuestionTriggers++;
         events.push("NewQuestion");
       });
@@ -52,7 +66,7 @@ module.exports = (function () {
       var triggered = false;
       trivia.subscribe("NewQuestion", function () {
         triggered = true;
-        assert.ok(trivia.getCurrentQuestion() instanceof Question);
+        assert.ok(typeof trivia.getCurrentQuestionString() === "string");
       });
       trivia.newQuestion();
       assert.eql(2, newQuestionTriggers);
@@ -85,13 +99,19 @@ module.exports = (function () {
 
       assertException(/:newQuestion:.+is stopped/i, trivia.newQuestion.bind(trivia));
     },
+    answering : function (assert) {
+      var trivia = createSampleTrivia();
+      trivia.start();
+      var answeredTriggered = false;
+      trivia.subscribe("Answered", function (trivia, person) {
+        assert.eql("me", person);
+        answeredTriggered = true;
+      });
+      trivia.answer("me", "1.5");
+      assert.ok(answeredTriggered);
+    },
     scores : function (assert) {
-      var trivia = new Trivia();
-      trivia.addQuestion(new Question({
-        question : "What is 3/2?",
-        answers : ["1.5", "1,5"]
-      }));
-
+      var trivia = createSampleTrivia();
       trivia.start();
       trivia.answer("me", "1");
       trivia.answer("me", "1.5");
@@ -99,6 +119,13 @@ module.exports = (function () {
       trivia.answer("me", "1.5");
       assert.eql(2, trivia.getScore("me"));
       assert.eql(0, trivia.getScore("other"));
+    },
+    "question number" : function (assert) {
+      var trivia = createSampleTrivia();
+      trivia.start();
+      assert.eql(1, trivia.getQuestionNumber());
+      trivia.answer("me", "1.5");
+      assert.eql(2, trivia.getQuestionNumber());
     }
   };
 })();
