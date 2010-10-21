@@ -17,6 +17,7 @@ module.exports = (function () {
       var assertException = Assertion.exception.bind(Assertion, assert);
       var trivia = new Trivia();
       trivia.createQuestion("What is 1+1?", ["2", "two"]);
+      assert.eql(1, trivia.getQuestionCount());
 
       // Don't rand an index outside of the array.
       // This would probably break...
@@ -150,6 +151,24 @@ module.exports = (function () {
       trivia.start();
       trivia.timesUp();
       assert.ok(!stoppedTriggered, "Premature stop after restart.");
+    },
+    serialize : function (assert) {
+      var trivia = new Trivia();
+      trivia.createQuestion("foo", ["bar", "baz"]);
+      assert.eql('{"questions":[{"question":"foo","answers":["bar","baz"]}]}',
+                 JSON.stringify(trivia.serialize()));
+    },
+    unserialize : function (assert) {
+      var trivia = Trivia.unserialize({
+        questions : [{
+          question : "foo",
+          answers : ["bar", "baz"]
+        }, {
+          question : "what is 1+1?",
+          answers : ["2", "two"]
+        }]
+      });
+      assert.eql(2, trivia.getQuestionCount());
     }
   };
 })();
