@@ -6,8 +6,8 @@ require('../triviabot');
 module.exports = (function () {
   var Assertion = CactusJuice.Dev.Assertion;
 
-  function createSampleTrivia() {
-    var trivia = new Trivia();
+  function createSampleTrivia(options) {
+    var trivia = new Trivia(options);
     trivia.createQuestion("What is 3/2?", ["1.5", "1,5"]);
     return trivia;
   }
@@ -130,6 +130,26 @@ module.exports = (function () {
       trivia.timesUp();
       assert.eql(1, timesUpTriggers);
       assert.eql(2, newQuestionTriggers);
+    },
+    "stop after unanswered streak" : function (assert) {
+      var trivia = createSampleTrivia({
+        stopAfterUnansweredStreak : 3
+      });
+      var stoppedTriggered = false;
+      trivia.subscribe("Stopped", function () {
+        stoppedTriggered = true;
+      });
+      trivia.start();
+      trivia.timesUp();
+      trivia.timesUp();
+      assert.ok(!stoppedTriggered, "Premature stop.");
+      trivia.timesUp();
+      assert.ok(stoppedTriggered, "Did not stop.");
+      // Reset counter after stop.
+      stoppedTriggered = false;
+      trivia.start();
+      trivia.timesUp();
+      assert.ok(!stoppedTriggered, "Premature stop after restart.");
     }
   };
 })();
