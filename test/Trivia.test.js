@@ -114,6 +114,22 @@ module.exports = (function () {
       assert.eql(1, trivia.getQuestionNumber());
       trivia.answer("me", "1.5");
       assert.eql(2, trivia.getQuestionNumber());
+    },
+    "times up" : function (assert) {
+      var trivia = createSampleTrivia();
+      var newQuestionTriggers = 0;
+      trivia.subscribe("NewQuestion", function () {
+        newQuestionTriggers++;
+      });
+      var timesUpTriggers = 0;
+      trivia.subscribe("TimesUp", function () {
+        timesUpTriggers++;
+      });
+      trivia.start();
+      assert.eql(1, newQuestionTriggers);
+      trivia.timesUp();
+      assert.eql(1, timesUpTriggers);
+      assert.eql(2, newQuestionTriggers);
     }
   };
 })();
