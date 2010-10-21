@@ -9,5 +9,7 @@ var iw = createTriviaBot({
   joinChannels : ["#c-test"]
 });
 
-iw.getTrivia().createQuestion("What is 1+1?", ["2", "two"]);
-iw.getTrivia().createQuestion("What is 1-1?", ["0", "zero"]);
+iw.subscribe("TriviaLoaded", function () {
+  iw.getTrivia().createQuestion("What is 1+1?", ["2", "two"]);
+  iw.getTrivia().createQuestion("What is 1-1?", ["0", "zero"]);
+});
