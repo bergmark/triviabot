@@ -5,16 +5,9 @@ var createTriviaBot = triviabot.createTriviaBot;
 var iw = createTriviaBot({
   IRC : IRC,
   server : "irc.vassius.se",
-  nick : "triviabot",
+  nicks : ["triviabot"],
   joinChannels : ["#c-test"]
-
 });
 
-iw.getTrivia().addQuestion(new Question({
-  question : "What is 1+1?",
-  answers : ["2", "two"]
-}));
-iw.getTrivia().addQuestion(new Question({
-    question : "What is 1-1?",
-    answers : ["0", "zero"]
-}));
+iw.getTrivia().createQuestion("What is 1+1?", ["2", "two"]);
+iw.getTrivia().createQuestion("What is 1-1?", ["0", "zero"]);

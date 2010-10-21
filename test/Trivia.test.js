@@ -8,10 +8,7 @@ module.exports = (function () {
 
   function createSampleTrivia() {
     var trivia = new Trivia();
-    trivia.addQuestion(new Question({
-      question : "What is 3/2?",
-      answers : ["1.5", "1,5"]
-    }));
+    trivia.createQuestion("What is 3/2?", ["1.5", "1,5"]);
     return trivia;
   }
 
@@ -19,10 +16,7 @@ module.exports = (function () {
     test : function (assert) {
       var assertException = Assertion.exception.bind(Assertion, assert);
       var trivia = new Trivia();
-      trivia.addQuestion(new Question({
-        question : "What is 1+1?",
-        answers : ["2", "two"]
-      }));
+      trivia.createQuestion("What is 1+1?", ["2", "two"]);
 
       // Don't rand an index outside of the array.
       // This would probably break...
@@ -31,10 +25,7 @@ module.exports = (function () {
       assert.isDefined(trivia._getRandomQuestion());
       assert.isDefined(trivia._getRandomQuestion());
 
-      trivia.addQuestion(new Question({
-        question : "What is 0-0?",
-        answers : ["0", "zero"]
-      }));
+      trivia.createQuestion("What is 0-0?", ["0", "zero"]);
 
       var events = [];
       var startTriggers = 0;
@@ -81,10 +72,7 @@ module.exports = (function () {
       // Stopping.
       trivia = new Trivia();
       assert.ok(!trivia.isStarted());
-      trivia.addQuestion(new Question({
-        question : "What is 2*2?",
-        answers : ["4", "four"]
-      }));
+      trivia.createQuestion("What is 2*2?", ["4", "four"]);
       trivia.start();
       assert.ok(trivia.isStarted());
       var stoppedTriggered = false;
