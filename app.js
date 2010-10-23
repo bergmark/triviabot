@@ -6,5 +6,8 @@ var iw = createTriviaBot({
   IRC : IRC,
   server : "irc.vassius.se",
   nicks : ["triviabot"],
-  joinChannels : ["#c-test"]
+  joinChannels : ["#c-test"],
+  filePath : "./trivia.txt",
+  questionTime : 5,
+  admins : ["adnam!*@*"]
 });
