@@ -8,8 +8,3 @@ var iw = createTriviaBot({
   nicks : ["triviabot"],
   joinChannels : ["#c-test"]
 });
-
-iw.subscribe("TriviaLoaded", function () {
-  iw.getTrivia().createQuestion("What is 1+1?", ["2", "two"]);
-  iw.getTrivia().createQuestion("What is 1-1?", ["0", "zero"]);
-});
