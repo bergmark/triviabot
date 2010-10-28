@@ -99,7 +99,7 @@ module.exports = (function () {
       trivia.answer("me", "1.5");
       assert.ok(answeredTriggered);
     },
-    scores : function (assert) {
+    score : function (assert) {
       var trivia = createSampleTrivia();
       trivia.start();
       trivia.answer("me", "1");
@@ -160,7 +160,7 @@ module.exports = (function () {
       var h = trivia.serialize();
       assert.eql('[{"question":"foo","answers":["bar","baz"]}]',
                 JSON.stringify(h.questions));
-      assert.eql(1, h.score.me);
+      assert.eql(1, h.score[0][1]);
     },
     unserialize : function (assert) {
       var trivia = Trivia.unserialize({
@@ -171,12 +171,42 @@ module.exports = (function () {
           question : "what is 1+1?",
           answers : ["2", "two"]
         }],
-        score : {
-          me : 1
-        }
+        score : [
+          ["me", 1]
+        ]
       });
       assert.eql(2, trivia.getQuestionCount());
       assert.eql(1, trivia.getScore("me"));
+    },
+    serializeUnserializeCompoundPerson : function (assert) {
+      Class("Person", {
+        has : {
+          name : null
+        },
+        methods : {
+          serialize : function () {
+            return {
+              name : this.name
+            };
+          }
+        }
+      });
+      var p;
+      var trivia = Trivia.unserialize({
+        questions : [{
+          question : "foo",
+          answers : ["bar"]
+        }],
+        score : [[{ name : "x" }, 1]]
+      }, {
+        personUnserializer : function (h) {
+          p = new Person({
+            name : h.name
+          });
+          return p;
+        }
+      });
+      assert.eql(1, trivia.getScore(p));
     }
   };
 })();
