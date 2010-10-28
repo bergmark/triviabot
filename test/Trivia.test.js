@@ -155,8 +155,12 @@ module.exports = (function () {
     serialize : function (assert) {
       var trivia = new Trivia();
       trivia.createQuestion("foo", ["bar", "baz"]);
-      assert.eql('{"questions":[{"question":"foo","answers":["bar","baz"]}]}',
-                 JSON.stringify(trivia.serialize()));
+      trivia.start();
+      trivia.answer("me", "bar");
+      var h = trivia.serialize();
+      assert.eql('[{"question":"foo","answers":["bar","baz"]}]',
+                JSON.stringify(h.questions));
+      assert.eql(1, h.score.me);
     },
     unserialize : function (assert) {
       var trivia = Trivia.unserialize({
@@ -166,9 +170,13 @@ module.exports = (function () {
         }, {
           question : "what is 1+1?",
           answers : ["2", "two"]
-        }]
+        }],
+        score : {
+          me : 1
+        }
       });
       assert.eql(2, trivia.getQuestionCount());
+      assert.eql(1, trivia.getScore("me"));
     }
   };
 })();
