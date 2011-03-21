@@ -177,7 +177,7 @@ module.exports = (function () {
       assert.eql(1, trivia.getScore("me"));
     },
     serializeUnserializeCompoundPerson : function () {
-      Class("Person2", {
+      Class("Person", {
         has : {
           name : null
         },
@@ -198,7 +198,7 @@ module.exports = (function () {
         score : [[{ name : "x" }, 1]]
       }, {
         personUnserializer : function (h) {
-          p = new Person2({
+          p = new Person({
             name : h.name
           });
           return p;
