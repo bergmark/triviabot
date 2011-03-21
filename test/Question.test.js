@@ -1,8 +1,9 @@
-require('../triviabot.js');
+require('../triviabot');
+var assert = require('assert');
 
 module.exports = (function () {
   return {
-    test : function (assert) {
+    test : function () {
       var q = new Question({
         question : "What is 1+1?",
         answers : ["2", "two"]
@@ -12,14 +13,14 @@ module.exports = (function () {
       assert.ok(q.isCorrectAnswer("two"));
       assert.ok(!q.isCorrectAnswer("3"));
     },
-    serialize : function (assert) {
+    serialize : function () {
       var q = new Question({
         question : "foo",
         answers : ["bar", "baz"]
       });
       assert.eql('{"question":"foo","answers":["bar","baz"]}', JSON.stringify(q.serialize()));
     },
-    unserialize : function (assert) {
+    unserialize : function () {
       var q = Question.unserialize({
         question : "foo",
         answers : ["bar", "baz"]

@@ -1,9 +1,0 @@
-[submodule "vendor/CactusJuice"]
-	path = vendor/CactusJuice
-	url = git@github.com:Raevel/CactusJuice.git
-[submodule "vendor/IrcWrapper"]
-	path = vendor/IrcWrapper
-	url = git@github.com:Raevel/IrcWrapper.git
-[submodule "vendor/IRC-js"]
-	path = vendor/IRC-js
-	url = git@github.com:Raevel/IRC-js.git

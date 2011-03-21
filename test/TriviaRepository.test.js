@@ -1,8 +1,9 @@
+var assert = require('assert');
 require('../triviabot');
 
 module.exports = (function () {
   return {
-    "save questions" : function (assert) {
+    "save questions" : function () {
       var trivia = new Trivia();
       var repository = new TriviaRepository({
         filePath : "./testfiles/storage.txt",
@@ -13,7 +14,7 @@ module.exports = (function () {
       var trivia2 = repository.load();
       assert.eql(1, trivia2.getQuestionCount());
     },
-    "save score" : function (assert) {
+    "save score" : function () {
       var trivia = new Trivia();
       var repository = new TriviaRepository({
         filePath : "./testfiles/storage.txt",

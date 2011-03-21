@@ -1,6 +1,6 @@
-require('./vendor/CactusJuice/CactusJuice');
-var IRC = require('./vendor/IRC-js/lib/irc');
-var IW = require('./vendor/IrcWrapper/IrcWrapper');
+require('CactusJuice/CactusJuice');
+var IRC = require('irc-js');
+var IW = require('IrcWrapper/IrcWrapper');
 require('./lib/Question');
 require('./lib/Trivia');
 require('./lib/TriviaRepository');

@@ -1,6 +1,4 @@
-require('../vendor/IrcWrapper/mock/IRCMock');
-require('../vendor/IrcWrapper/lib/IrcWrapper');
-
+var assert = require('assert');
 require('../triviabot');
 
 module.exports = (function () {
@@ -13,7 +11,7 @@ module.exports = (function () {
   }
 
   return {
-    test : function (assert) {
+    test : function () {
       var assertException = Assertion.exception.bind(Assertion, assert);
       var trivia = new Trivia();
       trivia.createQuestion("What is 1+1?", ["2", "two"]);
@@ -88,7 +86,7 @@ module.exports = (function () {
 
       assertException(/:newQuestion:.+is stopped/i, trivia.newQuestion.bind(trivia));
     },
-    answering : function (assert) {
+    answering : function () {
       var trivia = createSampleTrivia();
       trivia.start();
       var answeredTriggered = false;
@@ -99,7 +97,7 @@ module.exports = (function () {
       trivia.answer("me", "1.5");
       assert.ok(answeredTriggered);
     },
-    score : function (assert) {
+    score : function () {
       var trivia = createSampleTrivia();
       trivia.start();
       trivia.answer("me", "1");
@@ -109,14 +107,14 @@ module.exports = (function () {
       assert.eql(2, trivia.getScore("me"));
       assert.eql(0, trivia.getScore("other"));
     },
-    "question number" : function (assert) {
+    "question number" : function () {
       var trivia = createSampleTrivia();
       trivia.start();
       assert.eql(1, trivia.getQuestionNumber());
       trivia.answer("me", "1.5");
       assert.eql(2, trivia.getQuestionNumber());
     },
-    "times up" : function (assert) {
+    "times up" : function () {
       var trivia = createSampleTrivia();
       var newQuestionTriggers = 0;
       trivia.subscribe("NewQuestion", function () {
@@ -132,7 +130,7 @@ module.exports = (function () {
       assert.eql(1, timesUpTriggers);
       assert.eql(2, newQuestionTriggers);
     },
-    "stop after unanswered streak" : function (assert) {
+    "stop after unanswered streak" : function () {
       var trivia = createSampleTrivia({
         stopAfterUnansweredStreak : 3
       });
@@ -152,7 +150,7 @@ module.exports = (function () {
       trivia.timesUp();
       assert.ok(!stoppedTriggered, "Premature stop after restart.");
     },
-    serialize : function (assert) {
+    serialize : function () {
       var trivia = new Trivia();
       trivia.createQuestion("foo", ["bar", "baz"]);
       trivia.start();
@@ -162,7 +160,7 @@ module.exports = (function () {
                 JSON.stringify(h.questions));
       assert.eql(1, h.score[0][1]);
     },
-    unserialize : function (assert) {
+    unserialize : function () {
       var trivia = Trivia.unserialize({
         questions : [{
           question : "foo",
@@ -178,8 +176,8 @@ module.exports = (function () {
       assert.eql(2, trivia.getQuestionCount());
       assert.eql(1, trivia.getScore("me"));
     },
-    serializeUnserializeCompoundPerson : function (assert) {
-      Class("Person", {
+    serializeUnserializeCompoundPerson : function () {
+      Class("Person2", {
         has : {
           name : null
         },
@@ -200,7 +198,7 @@ module.exports = (function () {
         score : [[{ name : "x" }, 1]]
       }, {
         personUnserializer : function (h) {
-          p = new Person({
+          p = new Person2({
             name : h.name
           });
           return p;
